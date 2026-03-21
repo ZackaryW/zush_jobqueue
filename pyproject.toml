@@ -1,0 +1,35 @@
+[project]
+name = "zush-jobqueue"
+version = "0.1.0"
+description = "Detached FastAPI-backed job queue extension for zush"
+readme = "README.md"
+authors = [
+    { name = "ZackaryW", email = "36378555+ZackaryW@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "click>=8.3.1",
+    "fastapi>=0.135.1",
+    "httpx>=0.28.1",
+    "uvicorn>=0.42.0",
+    "zush",
+]
+
+[project.scripts]
+zush-jobqueue = "zush_jobqueue:main"
+
+[build-system]
+requires = ["uv_build>=0.10.11,<0.11.0"]
+build-backend = "uv_build"
+
+[tool.uv.sources]
+zush = { path = "../zush" }
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
