@@ -44,6 +44,11 @@ class JobQueueClient:
         response.raise_for_status()
         return response.json()
 
+    def next(self, name: str) -> list[dict[str, Any]]:
+        response = self._client.get(f"/next/{name}")
+        response.raise_for_status()
+        return response.json()
+
     def queuekill(self, name: str, max_lifetime: float, action: str) -> dict[str, Any]:
         response = self._client.post(
             f"/queuekill/{name}",

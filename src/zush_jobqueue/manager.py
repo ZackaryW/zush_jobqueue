@@ -122,6 +122,19 @@ class JobQueueManager:
             self._start_background_run(name, entry)
             return deepcopy(entry["payload"])
 
+    def next(self, name: str) -> list[dict]:
+        with self._lock:
+            queue = self._queue_record(name)
+            if isinstance(queue.get("running"), dict):
+                return deepcopy(queue["running"]["payload"])
+            if not queue["pending"]:
+                raise KeyError(name)
+            entry = queue["pending"].pop(0)
+            queue["running"] = entry
+            self._persist()
+            self._start_background_run(name, entry)
+            return deepcopy(entry["payload"])
+
     def complete(self, name: str, status: str = "completed") -> dict[str, Any]:
         with self._lock:
             queue = self._queue_record(name)

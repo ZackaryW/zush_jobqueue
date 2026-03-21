@@ -20,6 +20,7 @@ Detached queue server, CLI wrapper, zush plugin surface, restore-on-start behavi
 - Treat forced completion of an actively running job as cancellation in queue status and logs.
 - Provide a dedicated `check` command and `/check/{name}` endpoint for per-queue completion state.
 - `check` also supports `--wait` with timeout and poll interval controls for blocking completion checks.
+- Provide a `/next/{name}` endpoint and matching CLI command to pop and start the next pending queue entry without falling back to the base stored payload.
 
 ## Confirmed job item types
 

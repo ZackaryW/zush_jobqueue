@@ -119,3 +119,18 @@ def test_cli_check_wait_times_out(monkeypatch) -> None:
 
     assert result.exit_code != 0
     assert "Timed out waiting for queue completion" in result.output
+
+
+def test_cli_next_command_uses_http_client(monkeypatch) -> None:
+    monkeypatch.setattr("zush_jobqueue.cli.ensure_server", lambda: True)
+
+    class _FakeClient:
+        def next(self, name: str) -> list[dict]:
+            return [{"type": "sleep", "int": 0}]
+
+    monkeypatch.setattr("zush_jobqueue.cli.JobQueueClient", lambda: _FakeClient())
+
+    result = CliRunner().invoke(build_cli(), ["next", "deploy"])
+
+    assert result.exit_code == 0
+    assert json.loads(result.output) == [{"type": "sleep", "int": 0}]

@@ -125,3 +125,21 @@ def test_check_endpoint_reports_completion_state(tmp_path: Path) -> None:
     assert body["status"] == "completed"
     assert body["running"] is False
     assert body["pending"] == 0
+
+
+def test_next_endpoint_starts_next_pending_entry(tmp_path: Path) -> None:
+    storage = DirectoryStorage(tmp_path)
+    client = TestClient(create_app(storage=storage))
+    payload = [{"type": "sleep", "int": 1}]
+
+    client.post("/add/build", json=payload)
+    client.put("/queue/build")
+    client.put("/queue/build")
+
+    response = client.get("/next/build")
+    assert response.status_code == 200
+    assert response.json() == payload
+
+    queue_body = client.get("/queue").json()
+    assert queue_body["queues"]["build"]["running"] is True
+    assert queue_body["queues"]["build"]["pending"] == 1

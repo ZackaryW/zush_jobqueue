@@ -65,6 +65,13 @@ def create_app(
         except KeyError as exc:
             raise HTTPException(status_code=404, detail=str(exc)) from exc
 
+    @app.get("/next/{name}")
+    def next_entry(name: str) -> list[dict[str, Any]]:
+        try:
+            return manager.next(name)
+        except KeyError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
     @app.post("/queuekill/{name}")
     def queuekill(name: str, request: QueueKillRequest) -> dict[str, Any]:
         return manager.configure_queuekill(name, request.max_lifetime, request.action)

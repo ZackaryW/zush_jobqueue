@@ -16,12 +16,13 @@
 - Forced completion of active long-running jobs is tracked as cancellation.
 - Dedicated per-name completion checks are available via `check` CLI and `/check/{name}`.
 - `check --wait` can block until the queue reaches a terminal state or times out.
+- `/next/{name}` is available to pop/start the next pending queue entry, and the CLI exposes it as `next`.
 
 ## What was decided
 
 - FastAPI server on port `16666`.
 - Detached background process startup.
-- HTTP endpoints for add, get, queue, queue listing, start, queuekill, complete, and quit.
+- HTTP endpoints for add, get, queue, queue listing, start, next, queuekill, complete, and quit.
 - Dedicated storage under `~/.zush/jobqueue/`.
 - Completion logging under `logs/{date}.json`.
 - TDD-first implementation.

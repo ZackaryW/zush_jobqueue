@@ -97,6 +97,12 @@ def build_cli(include_serve: bool = True) -> click.Group:
         client = _require_server()
         _json_echo(client.start(name))
 
+    @cli.command("next")
+    @click.argument("name")
+    def next_command(name: str) -> None:
+        client = _require_server()
+        _json_echo(client.next(name))
+
     @cli.command("queuekill")
     @click.argument("name")
     @click.argument("max_lifetime", type=float)
